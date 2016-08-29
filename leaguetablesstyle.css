@@ -1,0 +1,130 @@
+body{
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 16px;
+    line-height: 1.5;
+    margin: 0 auto;
+    max-width: 800px;
+    padding: 2em 2em 4em;
+    background-color: #white;
+}
+
+h1 {
+    font-size: 48px;
+    text-align: center;
+}
+
+.leaguetable {
+    
+}
+
+td {
+    padding: 5px;
+    border-left: 1px solid black;
+    border-right: 1px solid black;
+}
+
+tr {
+    border-bottom: 1px solid black; 
+}
+
+.tabletitle {
+    color:red;
+}
+
+.tableheader {
+    padding: 5px;
+    border-left: 1px solid black;
+    border-right: 1px solid black;
+}
+
+.clspot {
+    background-color: skyblue;
+}
+
+.elspot {
+    background-color: orange;
+}
+
+.relegation {
+    background-color: red;
+}
+
+
+.wrappertableleft {
+    border:none;
+    padding-right: 40px;
+}
+
+.wrappertableright {
+    border:none;
+    padding-left: 40px;
+}
+
+.ltable {
+    width: 400px;
+}
+
+#cllegend {
+    background-color: skyblue;
+    height: 20px;
+    width: 20px;
+    margin-bottom: 10px;
+    margin-right: 5px;
+    float: left;
+}
+
+#ellegend {
+    background-color: orange;
+    height: 20px;
+    width: 20px;
+    margin-bottom: 10px;
+    margin-right: 5px;
+    float: left;
+}
+
+#rellegend {
+    background-color: red;
+    height: 20px;
+    width: 20px;
+    margin-right: 5px;
+    float: left;
+}
+
+.legendtext {
+    font-size: 16px;
+}
+
+ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: #1485CC;
+  
+}
+
+li {
+    float: left;
+    border-right:1px solid;
+    border-color: gainsboro;
+}
+
+li:last-child {
+    border-right: none;
+}
+
+li a {
+    display: block;
+    color: white;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+}
+
+li a:hover:not(.active) {
+    background-color: #0971B2;
+}
+
+#active {
+    background-color: #C92A2A;
+}
