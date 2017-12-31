@@ -1,8 +1,17 @@
 {
     "name": "TestHTMLJava",
     "version": "1.0.0",
-    "keywords": ["util", "functional", "server", "client", "browser"],
+    "keywords": [
+        "util",
+        "functional",
+        "server",
+        "client",
+        "browser"
+    ],
     "author": "Ryan",
     "contributors": [],
-    "dependencies": {}
+    "dependencies": {
+        "chai": "^4.1.2",
+        "chai-http": "^3.0.0"
+    }
 }
