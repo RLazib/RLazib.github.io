@@ -50,14 +50,24 @@
         </ul>
         <h1>World Soccer Stats</h1>
         <h2>Top Scorers</h2>
-        <script>
-            chai.use(chaiHttp);
-            
-            let URL = "http://api.football-data.org/v1";
-            chai.request(URL).get("/competitions/445/leagueTable").set("X-Auth-Token", "8097366a810b4991800e3769c1e1dfbd").then(function(res){
-                //document.body.innerHTML = "<h3>Data: " + res.body + "</h3>";
-                document.body.innerHTML = "<h3>Data: " + res.body["standing"]["0"]["points"] + "</h3>";
-            })
-        </script>
+        <div>
+            <script>
+                chai.use(chaiHttp);
+                let premRes = "";
+                let ligaRes = "";
+                let URL = "http://api.football-data.org/v1";
+                chai.request(URL).get("/competitions/445/leagueTable").set("X-Auth-Token", "8097366a810b4991800e3769c1e1dfbd").then(function(res445){
+                    premRes = res445;
+                    chai.request(URL).get("/competitions/455/leagueTable").set("X-Auth-Token", "8097366a810b4991800e3769c1e1dfbd").then(function(res455){
+                        ligaRes = res455;
+                        document.body.innerHTML = "<h3>Data: " + ligaRes.body["standing"]["0"]["points"] + "Data2: " + premRes.body["standing"]["0"]["points"] + "</h3>";
+                    })
+                });
+                chai.request(URL).get("/competitions/455/leagueTable").set("X-Auth-Token", "8097366a810b4991800e3769c1e1dfbd").then(function(ligaRes){
+                    //document.body.innerHTML = "<h3>Data: " + res.body + "</h3>";
+                    document.body.innerHTML = "<h3>Data2: " + ligaRes.body["standing"]["0"]["points"] + "</h3>";
+                });
+            </script>
+        </div>
     </body>
 </html>
