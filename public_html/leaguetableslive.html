@@ -12,6 +12,29 @@ and open the template in the editor.
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
     </head>
     <body>
+        <script>
+                chai.use(chaiHttp);
+                /*document.body.innerHTML = "<h3>Data: " + ligaRes.body["standing"]["0"]["points"] + "Data2: " + premRes.body["standing"]["0"]["points"] + "</h3>";*/
+                let premRes = "";
+                let ligaRes = "";
+                let serieRes = "";
+                let bundesRes = "";
+                let URL = "https://api.football-data.org/v1";
+                chai.request(URL).get("/competitions/445/leagueTable").set("X-Auth-Token", "8097366a810b4991800e3769c1e1dfbd").then(function(res445){
+                    premRes = res445;
+                    chai.request(URL).get("/competitions/455/leagueTable").set("X-Auth-Token", "8097366a810b4991800e3769c1e1dfbd").then(function(res455){
+                        ligaRes = res455;
+                        chai.request(URL).get("/competitions/455/leagueTable").set("X-Auth-Token", "8097366a810b4991800e3769c1e1dfbd").then(function(res456){
+                            serieRes = res455;
+                            chai.request(URL).get("/competitions/455/leagueTable").set("X-Auth-Token", "8097366a810b4991800e3769c1e1dfbd").then(function(res452){
+                                bundesRes = res452;
+                                
+                                
+                            })
+                        })
+                    })
+                });
+            </script>
         <ul>
             <li><a href="index.html">Home</a></li>
             <li><a id="active" href="leaguetables.html">League Tables</a></li>
@@ -810,5 +833,4 @@ and open the template in the editor.
                 </td></tr></table>
         </div>
     </body>
-</html>
 </html>

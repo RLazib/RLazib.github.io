@@ -20,7 +20,7 @@
         <script>
             chai.use(chaiHttp);
         </script>
-        
+       
     </head>
     <body>
         <!--[if lt IE 8]>
@@ -41,7 +41,7 @@
             r.parentNode.insertBefore(e,r)}(window,document,'script','ga'));
             ga('create','UA-XXXXX-X','auto');ga('send','pageview');
         </script>
-        <ul>
+         <ul>
             <li><a id="active" href="index2.html">Home</a></li>
             <li><a href="leaguetables.html">League Tables</a></li>
             <li><a href="fixtures.html">Upcoming Fixtures</a></li>
@@ -50,20 +50,29 @@
         </ul>
         <h1>World Soccer Stats</h1>
         <h2>Top Scorers</h2>
-        <div>
-            <script>
-                chai.use(chaiHttp);
-                let premRes = "";
-                let ligaRes = "";
-                let URL = "https://api.football-data.org/v1";
-                chai.request(URL).get("/competitions/445/leagueTable").set("X-Auth-Token", "8097366a810b4991800e3769c1e1dfbd").then(function(res445){
-                    premRes = res445;
-                    chai.request(URL).get("/competitions/455/leagueTable").set("X-Auth-Token", "8097366a810b4991800e3769c1e1dfbd").then(function(res455){
-                        ligaRes = res455;
-                        document.body.innerHTML = "<h3>Data: " + ligaRes.body["standing"]["0"]["points"] + "Data2: " + premRes.body["standing"]["0"]["points"] + "</h3>";
+        <div id="dataDiv"></div>
+        <script>
+            chai.use(chaiHttp);
+            /*document.body.innerHTML = "<h3>Data: " + ligaRes.body["standing"]["0"]["points"] + "Data2: " + premRes.body["standing"]["0"]["points"] + "</h3>";*/
+            let premRes = "";
+            let ligaRes = "";
+            let serieRes = "";
+            let bundesRes = "";
+            let URL = "https://api.football-data.org/v1";
+            chai.request(URL).get("/competitions/445/leagueTable").set("X-Auth-Token", "8097366a810b4991800e3769c1e1dfbd").then(function(res445){
+                premRes = res445;
+                chai.request(URL).get("/competitions/455/leagueTable").set("X-Auth-Token", "8097366a810b4991800e3769c1e1dfbd").then(function(res455){
+                    ligaRes = res455;
+                    chai.request(URL).get("/competitions/455/leagueTable").set("X-Auth-Token", "8097366a810b4991800e3769c1e1dfbd").then(function(res456){
+                        serieRes = res455;
+                        chai.request(URL).get("/competitions/455/leagueTable").set("X-Auth-Token", "8097366a810b4991800e3769c1e1dfbd").then(function(res452){
+                            bundesRes = res452;
+                                
+                            document.getElementById("dataDiv").innerHTML = "<h3>Data: " + ligaRes.body["standing"]["0"]["points"] + "Data2: " + premRes.body["standing"]["0"]["points"] + "</h3>";
+                            })
+                        })
                     })
                 });
-            </script>
-        </div>
+        </script>
     </body>
 </html>
