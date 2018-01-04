@@ -10,8 +10,52 @@ and open the template in the editor.
         <link rel="stylesheet" href="css/fixtures.css">
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        <script src="js/vendor/modernizr-2.8.3.min.js"></script>
+        <script src="js/chai.js"></script>
+        <script src="js/chai-http.js"></script>
+        <script>
+            chai.use(chaiHttp);
+        </script>
     </head>
     <body>
+        <script type="text/javascript">
+            chai.use(chaiHttp);
+            /*document.body.innerHTML = "<h3>Data: " + ligaRes.body["standing"]["0"]["points"] + "Data2: " + premRes.body["standing"]["0"]["points"] + "</h3>";*/
+            let fixList = "";
+            let URL = "https://api.football-data.org/v1";
+            chai.request(URL).get("/fixtures").set("X-Auth-Token", "8097366a810b4991800e3769c1e1dfbd").then(function(res){
+                fixList = res.body;
+                let currentDate = "";
+                
+                for(let i = 0; i < fixList["fixtures"].length; i++){
+                    
+                    if(currentDate == fixList["fixtures"][i]["date"]){
+                        var h = document.createElement("p");
+                        var t = document.createTextNode(fixList["fixtures"][i]["homeTeamName"] + " vs " + fixList["fixtures"][i]["awayTeamName"]);
+                        h.appendChild(t);
+                        document.body.appendChild(h);
+                    }else{
+                        currentDate = fixList["fixtures"][i]["date"];
+                        var header = document.createElement("h2");
+                        var headerContent = document.createTextNode("Matches At: " + currentDate);
+                        header.appendChild(headerContent);
+                        document.body.appendChild(header);
+                        
+                        var h = document.createElement("p");
+                        var t = document.createTextNode(fixList["fixtures"][i]["homeTeamName"] + " vs " + fixList["fixtures"][i]["awayTeamName"]);
+                        h.appendChild(t);
+                        document.body.appendChild(h);
+                    }
+                    
+                    
+                }
+                
+                /*document.getElementById("datap").innerHTML = fixList["fixtures"][0]["homeTeamName"];*/
+                
+            });
+        </script>
+        
         <ul>
             <li><a href="index.html">Home</a></li>
             <li><a href="leaguetables.html">League Tables</a></li>
@@ -20,6 +64,9 @@ and open the template in the editor.
             <li style="float:right"><a href="about.html">About</a></li>
         </ul>
         <h1>Upcoming Fixtures</h1>
+        
+        <!--<p id="datap"></p>
+        
         <div class="listdivwrapper">
             <div class="fixturedivleft">
                 <h2>Premier League Gameweek 4:</h2>
@@ -92,6 +139,6 @@ and open the template in the editor.
                     <li class="fixturelistitem">Mainz 05 - 8:30 AM - Hoffenheim</li>
                 </ul>
             </div>
-         </div>
+         </div>-->
     </body>
 </html>
