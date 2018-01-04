@@ -7,34 +7,73 @@ and open the template in the editor.
 <html>
     <head>
         <title>League Tables</title>
-        <link rel="stylesheet" href="css/leaguetables.css">
+        <link rel="stylesheet" href="css/leaguetableslive.css">
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <!--<script src="https://code.jquery.com/jquery.min.js"></script>
+        <script src="https://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.10.0/bootstrap-table.min.js"></script>
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.10.0/bootstrap-table.min.css" rel="stylesheet" type="text/css" />-->
+        <link rel="stylesheet" href="css/normalize.min.css">
+        <link rel="stylesheet" href="css/main.css">
+        
+        <script src="https://code.jquery.com/jquery.min.js"></script>
+        <script src="https://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script>
+        <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.10.0/bootstrap-table.min.js"></script>-->
+        <script src="js/bootstrap-table.js"></script>
+        <!--<link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.10.0/bootstrap-table.min.css" rel="stylesheet" type="text/css" />-->
+        
+        <link rel="stylesheet" href="css/bootstrap-table.css">
+
+        <script src="js/vendor/modernizr-2.8.3.min.js"></script>
+        <script src="js/chai.js"></script>
+        <script src="js/chai-http.js"></script>
+        <script>
+            chai.use(chaiHttp);
+        </script>
+        
     </head>
     <body>
-        <script>
-                chai.use(chaiHttp);
-                /*document.body.innerHTML = "<h3>Data: " + ligaRes.body["standing"]["0"]["points"] + "Data2: " + premRes.body["standing"]["0"]["points"] + "</h3>";*/
-                let premRes = "";
-                let ligaRes = "";
-                let serieRes = "";
-                let bundesRes = "";
-                let URL = "https://api.football-data.org/v1";
-                chai.request(URL).get("/competitions/445/leagueTable").set("X-Auth-Token", "8097366a810b4991800e3769c1e1dfbd").then(function(res445){
-                    premRes = res445;
-                    chai.request(URL).get("/competitions/455/leagueTable").set("X-Auth-Token", "8097366a810b4991800e3769c1e1dfbd").then(function(res455){
-                        ligaRes = res455;
-                        chai.request(URL).get("/competitions/455/leagueTable").set("X-Auth-Token", "8097366a810b4991800e3769c1e1dfbd").then(function(res456){
-                            serieRes = res455;
-                            chai.request(URL).get("/competitions/455/leagueTable").set("X-Auth-Token", "8097366a810b4991800e3769c1e1dfbd").then(function(res452){
-                                bundesRes = res452;
-                                
-                                
-                            })
+       <script type="text/javascript">
+            chai.use(chaiHttp);
+            /*document.body.innerHTML = "<h3>Data: " + ligaRes.body["standing"]["0"]["points"] + "Data2: " + premRes.body["standing"]["0"]["points"] + "</h3>";*/
+            let premRes = "";
+            let ligaRes = "";
+            let serieRes = "";
+            let bundesRes = "";
+            let URL = "https://api.football-data.org/v1";
+            chai.request(URL).get("/competitions/445/leagueTable").set("X-Auth-Token", "8097366a810b4991800e3769c1e1dfbd").then(function(res445){
+                premRes = res445.body;
+                chai.request(URL).get("/competitions/455/leagueTable").set("X-Auth-Token", "8097366a810b4991800e3769c1e1dfbd").then(function(res455){
+                    ligaRes = res455.body;
+                    chai.request(URL).get("/competitions/456/leagueTable").set("X-Auth-Token", "8097366a810b4991800e3769c1e1dfbd").then(function(res456){
+                        serieRes = res456.body;
+                        chai.request(URL).get("/competitions/452/leagueTable").set("X-Auth-Token", "8097366a810b4991800e3769c1e1dfbd").then(function(res452){
+                            bundesRes = res452.body;
+                            
+                            $(document).ready(function () {
+                                $('#premtable').bootstrapTable({
+                                    //Assigning data to table
+                                    data: premRes["standing"]
+                                });
+                                $('#ligatable').bootstrapTable({
+                                    //Assigning data to table
+                                    data: ligaRes["standing"]
+                                });
+                                $('#serietable').bootstrapTable({
+                                    //Assigning data to table
+                                    data: serieRes["standing"]
+                                });
+                                $('#bundestable').bootstrapTable({
+                                    //Assigning data to table
+                                    data: bundesRes["standing"]
+                                });
+                            });
                         })
                     })
-                });
-            </script>
+                })
+            });
+        </script>
         <ul>
             <li><a href="index.html">Home</a></li>
             <li><a id="active" href="leaguetables.html">League Tables</a></li>
@@ -44,793 +83,109 @@ and open the template in the editor.
         </ul>
         <h1>League Tables</h1>
         <h2>
-            <div id="cllegend"></div> <p class="legendtext"> = Champion's League Spot </p>
-            <div id="ellegend"></div> <p class="legendtext"> = Europa League Spot</p>
-            <div id="rellegend"></div> <p class="legendtext"> = Relegation Spot</p>
+            <div id="legendcontainer">
+                <div id="cllegend">Champion's League Spot</div> 
+                <div id="ellegend">Europa League Spot</div> 
+                <div id="rellegend">Relegation Spot</div> 
+            </div>
         </h2>
-        <div class="leaguetable">
-            <table align="center"><tr><td class="wrappertableleft">
-                <table class="ltable" style="border-collapse:collapse;">
-                <thead>
-                    <tr>
-                        <th class="tabletitle" colspan="7">Premier League: Gameweek 2</th>
-                    </tr>
-                    <tr>
-                        <th class="tableheader"><em>Team</em></th>
-                        <th class="tableheader"><em>GP</em></th>
-                        <th class="tableheader"><em>W</em></th>
-                        <th class="tableheader"><em>D</em></th>
-                        <th class="tableheader"><em>L</em></th>
-                        <th class="tableheader"><em>GD</em></th>
-                        <th class="tableheader"><em>PTS</em></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr class="clspot">
-                    <td>Manchester City</td>
-                    <td>3</td>
-                    <td>3</td>
-                    <td>0</td>
-                    <td>0</td>
-                    <td>+6</td>
-                    <td>9</td> 
-                </tr>
-                    <tr class="clspot">
-                    <td>Chelsea</td>
-                    <td>3</td>
-                    <td>3</td>
-                    <td>0</td>
-                    <td>0</td>
-                    <td>+5</td>
-                    <td>9</td> 
-                </tr>
-                    <tr class="clspot">
-                    <td>Manchester United</td>
-                    <td>3</td>
-                    <td>3</td>
-                    <td>0</td>
-                    <td>0</td>
-                    <td>+5</td>
-                    <td>9</td> 
-                </tr>
-                <tr class="clspot">
-                    <td>Everton</td>
-                    <td>3</td>
-                    <td>2</td>
-                    <td>1</td>
-                    <td>0</td>
-                    <td>+2</td>
-                    <td>7</td> 
-                </tr>
-                    <tr class="elspot">
-                    <td>Hull City</td>
-                    <td>3</td>
-                    <td>2</td>
-                    <td>0</td>
-                    <td>1</td>
-                    <td>+2</td>
-                    <td>6</td> 
-                </tr>
-                    <tr class="elspot">
-                    <td>Middlesbrough</td>
-                    <td>3</td>
-                    <td>1</td>
-                    <td>2</td>
-                    <td>0</td>
-                    <td>+1</td>
-                    <td>5</td> 
-                </tr>
-                    <tr class="elspot">
-                    <td>Tottenham Hotspur</td>
-                    <td>3</td>
-                    <td>1</td>
-                    <td>2</td>
-                    <td>0</td>
-                    <td>+1</td>
-                    <td>5</td> 
-                </tr>
-                    <tr>
-                    <td>Arsenal</td>
-                    <td>3</td>
-                    <td>1</td>
-                    <td>1</td>
-                    <td>1</td>
-                    <td>1</td>
-                    <td>4</td> 
-                </tr>
-                    <tr>
-                    <td>Leicester City</td>
-                    <td>3</td>
-                    <td>1</td>
-                    <td>1</td>
-                    <td>1</td>
-                    <td>0</td>
-                    <td>4</td> 
-                </tr>
-                    <tr>
-                    <td>West Bromwich Albion</td>
-                    <td>3</td>
-                    <td>1</td>
-                    <td>1</td>
-                    <td>1</td>
-                    <td>0</td>
-                    <td>4</td> 
-                </tr>
-                    <tr>
-                    <td>Liverpool</td>
-                    <td>3</td>
-                    <td>1</td>
-                    <td>1</td>
-                    <td>1</td>
-                    <td>-1</td>
-                    <td>4</td> 
-                </tr>
-                    <tr>
-                    <td>West Ham United</td>
-                    <td>3</td>
-                    <td>1</td>
-                    <td>0</td>
-                    <td>2</td>
-                    <td>-2</td>
-                    <td>3</td> 
-                </tr>
-                    <tr>
-                    <td>Burnley</td>
-                    <td>3</td>
-                    <td>1</td>
-                    <td>0</td>
-                    <td>2</td>
-                    <td>-2</td>
-                    <td>3</td> 
-                </tr>
-                    <tr>
-                    <td>Swansea City</td>
-                    <td>3</td>
-                    <td>1</td>
-                    <td>0</td>
-                    <td>2</td>
-                    <td>-2</td>
-                    <td>3</td> 
-                </tr>
-                    <tr>
-                    <td>Southampton</td>
-                    <td>3</td>
-                    <td>0</td>
-                    <td>2</td>
-                    <td>1</td>
-                    <td>-2</td>
-                    <td>2</td> 
-                </tr>
-                    <tr>
-                    <td>Sunderland</td>
-                    <td>3</td>
-                    <td>0</td>
-                    <td>1</td>
-                    <td>2</td>
-                    <td>-2</td>
-                    <td>1</td> 
-                </tr>
-                    <tr>
-                    <td>Crystal Palace</td>
-                    <td>3</td>
-                    <td>0</td>
-                    <td>1</td>
-                    <td>2</td>
-                    <td>-2</td>
-                    <td>1</td> 
-                </tr>
-                    <tr class="relegation">
-                    <td>Watford</td>
-                    <td>3</td>
-                    <td>0</td>
-                    <td>1</td>
-                    <td>2</td>
-                    <td>-3</td>
-                    <td>1</td> 
-                </tr>
-                    <tr class="relegation">
-                    <td>Bournemouth</td>
-                    <td>3</td>
-                    <td>0</td>
-                    <td>1</td>
-                    <td>2</td>
-                    <td>-3</td>
-                    <td>1</td> 
-                </tr>
-                    <tr class="relegation">
-                    <td>Stoke City</td>
-                    <td>3</td>
-                    <td>0</td>
-                    <td>1</td>
-                    <td>2</td>
-                    <td>-4</td>
-                    <td>1</td> 
-                </tr>
-                </tbody>
-            </table>
-                </td><td class="wrappertableright">
-                <table class="ltable" style="border-collapse:collapse;">
-                <thead>
-                    <tr>
-                        <th class="tabletitle" colspan="7">La Liga: Gameweek 1</th>
-                    </tr>
-                    <tr>
-                        <th class="tableheader"><em>Team</em></th>
-                        <th class="tableheader"><em>GP</em></th>
-                        <th class="tableheader"><em>W</em></th>
-                        <th class="tableheader"><em>D</em></th>
-                        <th class="tableheader"><em>L</em></th>
-                        <th class="tableheader"><em>GD</em></th>
-                        <th class="tableheader"><em>PTS</em></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr class="clspot">
-                    <td>Las Palmas</td>
-                    <td>2</td>
-                    <td>2</td>
-                    <td>0</td>
-                    <td>0</td>
-                    <td>+6</td>
-                    <td>6</td> 
-                </tr>
-                    <tr class="clspot">
-                    <td>Barcelona</td>
-                    <td>2</td>
-                    <td>2</td>
-                    <td>0</td>
-                    <td>0</td>
-                    <td>+5</td>
-                    <td>6</td> 
-                </tr>
-                    <tr class="clspot">
-                    <td>Real Madrid</td>
-                    <td>2</td>
-                    <td>2</td>
-                    <td>0</td>
-                    <td>0</td>
-                    <td>+4</td>
-                    <td>6</td> 
-                </tr>
-                    <tr class="clspot">
-                    <td>Sevilla</td>
-                    <td>2</td>
-                    <td>1</td>
-                    <td>1</td>
-                    <td>0</td>
-                    <td>+2</td>
-                    <td>4</td> 
-                </tr>
-                    <tr class="elspot">
-                    <td>Deportivo</td>
-                    <td>2</td>
-                    <td>1</td>
-                    <td>1</td>
-                    <td>0</td>
-                    <td>+1</td>
-                    <td>4</td> 
-                </tr>
-                    <tr class="elspot">
-                    <td>Gijón</td>
-                    <td>2</td>
-                    <td>1</td>
-                    <td>1</td>
-                    <td>0</td>
-                    <td>+1</td>
-                    <td>4</td> 
-                </tr>
-                    <tr>
-                    <td>Leganes</td>
-                    <td>2</td>
-                    <td>1</td>
-                    <td>1</td>
-                    <td>0</td>
-                    <td>+1</td>
-                    <td>4</td> 
-                </tr>
-                    <tr>
-                    <td>Eibar</td>
-                    <td>2</td>
-                    <td>1</td>
-                    <td>0</td>
-                    <td>1</td>
-                    <td>-0</td>
-                    <td>3</td> 
-                </tr>
-                    <tr>
-                    <td>Real Sociodad</td>
-                    <td>2</td>
-                    <td>1</td>
-                    <td>0</td>
-                    <td>1</td>
-                    <td>-1</td>
-                    <td>3</td>
-                </tr>
-                    <tr>
-                    <td>Málaga</td>
-                    <td>2</td>
-                    <td>0</td>
-                    <td>2</td>
-                    <td>0</td>
-                    <td>0</td>
-                    <td>2</td>   
-                </tr>
-                    <tr>
-                    <td>Atlético Madrid</td>
-                    <td>2</td>
-                    <td>0</td>
-                    <td>2</td>
-                    <td>0</td>
-                    <td>0</td>
-                    <td>2</td> 
-                </tr>
-                    <tr>
-                    <td>Alavés</td>
-                    <td>2</td>
-                    <td>0</td>
-                    <td>2</td>
-                    <td>0</td>
-                    <td>0</td>
-                    <td>2</td> 
-                </tr>
-                    <tr>
-                    <td>Villarreal</td>
-                    <td>2</td>
-                    <td>0</td>
-                    <td>2</td>
-                    <td>0</td>
-                    <td>0</td>
-                    <td>2</td>  
-                </tr>
-                   <tr>
-                    <td>Espanyol</td>
-                    <td>2</td>
-                    <td>0</td>
-                    <td>1</td>
-                    <td>1</td>
-                    <td>-2</td>
-                    <td>0</td> 
-                </tr>
-                    <tr>
-                    <td>Osasuna</td>
-                    <td>2</td>
-                    <td>0</td>
-                    <td>1</td>
-                    <td>1</td>
-                    <td>-2</td>
-                    <td>1</td> 
-                </tr>
-                    <tr>
-                    <td>Granada</td>
-                    <td>2</td>
-                    <td>0</td>
-                    <td>1</td>
-                    <td>1</td>
-                    <td>-4</td>
-                    <td>1</td>  
-                </tr>
-                    <tr>
-                    <td>Real Betis</td>
-                    <td>2</td>
-                    <td>0</td>
-                    <td>1</td>
-                    <td>1</td>
-                    <td>-4</td>
-                    <td>1</td> 
-                </tr> 
-                    <tr class="relegation">
-                    <td>Athletic Bilbao</td>
-                    <td>2</td>
-                    <td>0</td>
-                    <td>0</td>
-                    <td>2</td>
-                    <td>-2</td>
-                    <td>0</td>
-                </tr>
-                    <tr class="relegation">
-                    <td>Celta Vigo</td>
-                    <td>2</td>
-                    <td>0</td>
-                    <td>0</td>
-                    <td>2</td>
-                    <td>-2</td>
-                    <td>0</td> 
-                </tr>
-                    <tr class="relegation">
-                    <td>Valencia</td>
-                    <td>2</td>
-                    <td>0</td>
-                    <td>0</td>
-                    <td>2</td>
-                    <td>-3</td>
-                    <td>0</td>
-                </tr>
-                </tbody>
-            </table>
-                </td></tr></table>
-        </div>
-        <div class="leaguetable">
-            <table align="center"><tr><td class="wrappertableleft">
-                <table class="ltable" style="border-collapse:collapse;">
-                <thead>
-                    <tr>
-                        <th class="tabletitle" colspan="7">Serie A: Gameweek 1</th>
-                    </tr>
-                    <tr>
-                        <th class="tableheader"><em>Team</em></th>
-                        <th class="tableheader"><em>GP</em></th>
-                        <th class="tableheader"><em>W</em></th>
-                        <th class="tableheader"><em>D</em></th>
-                        <th class="tableheader"><em>L</em></th>
-                        <th class="tableheader"><em>GD</em></th>
-                        <th class="tableheader"><em>PTS</em></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr class="clspot">
-                    <td>Genoa</td>
-                    <td>2</td>
-                    <td>2</td>
-                    <td>0</td>
-                    <td>0</td>
-                    <td>+4</td>
-                    <td>6</td> 
-                </tr>
-                    <tr class="clspot">
-                    <td>Juventus</td>
-                    <td>2</td>
-                    <td>2</td>
-                    <td>0</td>
-                    <td>0</td>
-                    <td>+2</td>
-                    <td>6</td> 
-                </tr>
-                    <tr class="clspot">
-                    <td>Sampdoria</td>
-                    <td>2</td>
-                    <td>2</td>
-                    <td>0</td>
-                    <td>0</td>
-                    <td>+2</td>
-                    <td>6</td> 
-                </tr>
-                    <tr class="elspot">
-                    <td>AS Roma</td>
-                    <td>2</td>
-                    <td>1</td>
-                    <td>1</td>
-                    <td>0</td>
-                    <td>+4</td>
-                    <td>4</td> 
-                </tr>
-                    <tr class="elspot">
-                    <td>US Pescara</td>
-                    <td>2</td>
-                    <td>1</td>
-                    <td>1</td>
-                    <td>0</td>
-                    <td>+3</td>
-                    <td>4</td>
-                </tr>
-                    <tr>
-                    <td>Napoli</td>
-                    <td>2</td>
-                    <td>1</td>
-                    <td>1</td>
-                    <td>0</td>
-                    <td>+2</td>
-                    <td>4</td>
-                </tr>
-                    <tr>
-                    <td>Torino</td>
-                    <td>2</td>
-                    <td>1</td>
-                    <td>0</td>
-                    <td>1</td>
-                    <td>+3</td>
-                    <td>3</td> 
-                </tr>
-                    <tr>
-                    <td>Chievo Verona</td>
-                    <td>2</td>
-                    <td>1</td>
-                    <td>0</td>
-                    <td>1</td>
-                    <td>+1</td>
-                    <td>3</td> 
-                </tr>
-                    <tr>
-                    <td>Lazio</td>
-                    <td>2</td>
-                    <td>1</td>
-                    <td>0</td>
-                    <td>1</td>
-                    <td>0</td>
-                    <td>3</td> 
-                </tr>
-                    <tr>
-                    <td>Fiorentina</td>
-                    <td>2</td>
-                    <td>1</td>
-                    <td>0</td>
-                    <td>1</td>
-                    <td>0</td>
-                    <td>3</td>
-                </tr>
-                    <tr>
-                    <td>AC Milan</td>
-                    <td>2</td>
-                    <td>1</td>
-                    <td>0</td>
-                    <td>1</td>
-                    <td>-1</td>
-                    <td>3</td> 
-                </tr>
+        
+        <table id="premtable">
+            <thead>
                 <tr>
-                    <td>Udinese</td>
-                    <td>2</td>
-                    <td>1</td>
-                    <td>0</td>
-                    <td>1</td>
-                    <td>-2</td>
-                    <td>3</td> 
-                </tr> 
-                    <tr>
-                    <td>Sassuolo</td>
-                    <td>2</td>
-                    <td>1</td>
-                    <td>0</td>
-                    <td>1</td>
-                    <td>-2</td>
-                    <td>3</td> 
+                    <th data-field="position">Pos</th>
+                    <th data-field="crestURI">Col</th>
+                    <th data-field="teamName">Club</th>
+                    <th data-field="playedGames">MP</th>
+                    <th data-field="wins">W</th>
+                    <th data-field="draws">D</th>
+                    <th data-field="losses">L</th>
+                    <th data-field="goals">GF</th>
+                    <th data-field="goalsAgainst">GA</th>
+                    <th data-field="goalDifference">GD</th>                   
+                    <th data-field="points">Points</th> 
                 </tr>
-                    <tr>
-                    <td>Bologna</td>
-                    <td>2</td>
-                    <td>1</td>
-                    <td>0</td>
-                    <td>1</td>
-                    <td>-3</td>
-                    <td>3</td> 
-                </tr>
-                    <tr>
-                    <td>Palermo</td>
-                    <td>2</td>
-                    <td>0</td>
-                    <td>1</td>
-                    <td>1</td>
-                    <td>-1</td>
-                    <td>1</td> 
-                </tr>
+            </thead>
+        </table>
+        
+        <div class="padderDiv"></div>
+        
+        <table id="ligatable">
+            <thead>
                 <tr>
-                    <td>Cagliari</td>
-                    <td>2</td>
-                    <td>0</td>
-                    <td>1</td>
-                    <td>1</td>
-                    <td>-2</td>
-                    <td>1</td> 
+                    <th data-field="position">Pos</th>
+                    <th data-field="crestURI">Col</th>
+                    <th data-field="teamName">Club</th>
+                    <th data-field="playedGames">MP</th>
+                    <th data-field="wins">W</th>
+                    <th data-field="draws">D</th>
+                    <th data-field="losses">L</th>
+                    <th data-field="goals">GF</th>
+                    <th data-field="goalsAgainst">GA</th>
+                    <th data-field="goalDifference">GD</th>                   
+                    <th data-field="points">Points</th> 
                 </tr>
-                    <tr>
-                    <td>Internazionale</td>
-                    <td>2</td>
-                    <td>0</td>
-                    <td>1</td>
-                    <td>1</td>
-                    <td>-2</td>
-                    <td>1</td> 
+            </thead>
+        </table>
+        
+        <div class="padderDiv"></div>
+        
+        <table id="serietable">
+            <thead>
+                <tr>
+                    <th data-field="position">Pos</th>
+                    <th data-field="crestURI">Col</th>
+                    <th data-field="teamName">Club</th>
+                    <th data-field="playedGames">MP</th>
+                    <th data-field="wins">W</th>
+                    <th data-field="draws">D</th>
+                    <th data-field="losses">L</th>
+                    <th data-field="goals">GF</th>
+                    <th data-field="goalsAgainst">GA</th>
+                    <th data-field="goalDifference">GD</th>                   
+                    <th data-field="points">Points</th> 
                 </tr>
-                    <tr class="relegation">
-                    <td>Atalanta</td>
-                    <td>2</td>
-                    <td>0</td>
-                    <td>0</td>
-                    <td>2</td>
-                    <td>-2</td>
-                    <td>0</td> 
+            </thead>
+        </table>
+        
+        <div class="padderDiv"></div>
+        
+        <table id="bundestable">
+            <thead>
+                <tr>
+                    <th data-field="position">Pos</th>
+                    <th data-field="crestURI">Col</th>
+                    <th data-field="teamName">Club</th>
+                    <th data-field="playedGames">MP</th>
+                    <th data-field="wins">W</th>
+                    <th data-field="draws">D</th>
+                    <th data-field="losses">L</th>
+                    <th data-field="goals">GF</th>
+                    <th data-field="goalsAgainst">GA</th>
+                    <th data-field="goalDifference">GD</th>                   
+                    <th data-field="points">Points</th> 
                 </tr>
-                    <tr class="relegation">
-                    <td>Crotone</td>
-                    <td>2</td>
-                    <td>0</td>
-                    <td>0</td>
-                    <td>2</td>
-                    <td>-3</td>
-                    <td>0</td>
-                </tr>
-                    <tr class="relegation">
-                    <td>Empoli</td>
-                    <td>2</td>
-                    <td>0</td>
-                    <td>0</td>
-                    <td>2</td>
-                    <td>-3</td>
-                    <td>0</td> 
-                </tr>
-                </tbody>
-            </table>
-                </td><td class="wrappertableright">
-                <table class="ltable" style="border-collapse:collapse;">
-                <thead>
-                    <tr>
-                        <th class="tabletitle" colspan="7">Bundesliga: Gameweek 1</th>
-                    </tr>
-                    <tr>
-                        <th class="tableheader"><em>Team</em></th>
-                        <th class="tableheader"><em>GP</em></th>
-                        <th class="tableheader"><em>W</em></th>
-                        <th class="tableheader"><em>D</em></th>
-                        <th class="tableheader"><em>L</em></th>
-                        <th class="tableheader"><em>GD</em></th>
-                        <th class="tableheader"><em>PTS</em></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr class="clspot">
-                    <td>Bayern München</td>
-                    <td>1</td>
-                    <td>1</td>
-                    <td>0</td>
-                    <td>0</td>
-                    <td>+6</td>
-                    <td>3</td> 
-                </tr>
-                    <tr class="clspot">
-                    <td>FC Köln</td>
-                    <td>1</td>
-                    <td>1</td>
-                    <td>0</td>
-                    <td>0</td>
-                    <td>+2</td>
-                    <td>3</td> 
-                </tr>
-                    <tr class="clspot">
-                    <td>VfL Wolfsburg</td>
-                    <td>1</td>
-                    <td>1</td>
-                    <td>0</td>
-                    <td>0</td>
-                    <td>+2</td>
-                    <td>3</td>  
-                </tr>
-                    <tr class="clspot">
-                    <td>Borussia Mönchengladbach</td>
-                    <td>1</td>
-                    <td>1</td>
-                    <td>0</td>
-                    <td>0</td>
-                    <td>+1</td>
-                    <td>3</td>  
-                </tr>
-                    <tr class="elspot">
-                    <td>Borussia Dortmund</td>
-                    <td>1</td>
-                    <td>1</td>
-                    <td>0</td>
-                    <td>0</td>
-                    <td>+1</td>
-                    <td>3</td>  
-                </tr>
-                    <tr class="elspot">
-                    <td>Hertha Berlin</td>
-                    <td>1</td>
-                    <td>1</td>
-                    <td>0</td>
-                    <td>0</td>
-                    <td>+1</td>
-                    <td>3</td>  
-                </tr>
-                    <tr>
-                    <td>Eintracht Frankfurt</td>
-                    <td>1</td>
-                    <td>1</td>
-                    <td>0</td>
-                    <td>0</td>
-                    <td>+1</td>
-                    <td>3</td>  
-                </tr>
-                    <tr>
-                    <td>TSG 1899 Hoffenheim</td>
-                    <td>1</td>
-                    <td>0</td>
-                    <td>1</td>
-                    <td>0</td>
-                    <td>0</td>
-                    <td>1</td>  
-                </tr>
-                    <tr>
-                    <td>RB Leipzig</td>
-                    <td>1</td>
-                    <td>0</td>
-                    <td>1</td>
-                    <td>0</td>
-                    <td>0</td>
-                    <td>1</td> 
-                </tr>
-                    <tr>
-                    <td>FC Ingolstadt 04</td>
-                    <td>1</td>
-                    <td>0</td>
-                    <td>1</td>
-                    <td>0</td>
-                    <td>0</td>
-                    <td>1</td>    
-                </tr>
-                    <tr>
-                    <td>Hamburger SV</td>
-                    <td>1</td>
-                    <td>0</td>
-                    <td>1</td>
-                    <td>0</td>
-                    <td>0</td>
-                    <td>1</td>   
-                </tr>
-                    <tr>
-                    <td>FSV Mainz 05</td>
-                    <td>1</td>
-                    <td>0</td>
-                    <td>0</td>
-                    <td>1</td>
-                    <td>-1</td>
-                    <td>0</td>  
-                </tr> 
-                    <tr>
-                    <td>Bayer Leverkusen</td>
-                    <td>1</td>
-                    <td>0</td>
-                    <td>1</td>
-                    <td>0</td>
-                    <td>-1</td>
-                    <td>0</td>  
-                </tr>
-                    <tr>
-                    <td>SC Freiburg</td>
-                    <td>1</td>
-                    <td>0</td>
-                    <td>0</td>
-                    <td>1</td>
-                    <td>-1</td>
-                    <td>0</td> 
-                </tr> 
-                    <tr>
-                    <td>Schalke 04</td>
-                    <td>1</td>
-                    <td>0</td>
-                    <td>0</td>
-                    <td>1</td>
-                    <td>-1</td>
-                    <td>0</td>  
-                </tr>                                    
-                    <tr>
-                    <td>FC Augsburg</td>
-                    <td>1</td>
-                    <td>0</td>
-                    <td>0</td>
-                    <td>1</td>
-                    <td>-2</td>
-                    <td>0</td> 
-                </tr>                   
-                    <tr  class="relegation">
-                    <td>SV Darmstadt 98</td>
-                    <td>1</td>
-                    <td>0</td>
-                    <td>0</td>
-                    <td>1</td>
-                    <td>-2</td>
-                    <td>0</td> 
-                </tr>
-                    <tr  class="relegation">
-                    <td>SV Werder Bremen</td>
-                    <td>1</td>
-                    <td>0</td>
-                    <td>0</td>
-                    <td>1</td>
-                    <td>-6</td>
-                    <td>0</td>   
-                </tr>
-                </tbody>
-            </table>
-                </td></tr></table>
-        </div>
+            </thead>
+        </table>
+        
+        <button onclick="topFunction()" id="myBtn" title="Go to top">Top</button>
+        
+        <script>
+            window.onscroll = function() {scrollFunction()};
+
+            function scrollFunction() {
+                if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+                    document.getElementById("myBtn").style.display = "block";
+                } else {
+                    document.getElementById("myBtn").style.display = "none";
+                }
+            }
+
+            function topFunction() {
+                document.body.scrollTop = 0;
+                document.documentElement.scrollTop = 0;
+            }
+        </script>
+        
     </body>
 </html>

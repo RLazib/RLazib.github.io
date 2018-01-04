@@ -13,6 +13,12 @@
 
         <link rel="stylesheet" href="css/normalize.min.css">
         <link rel="stylesheet" href="css/main.css">
+        
+        <script src="https://code.jquery.com/jquery.min.js"></script>
+        <script src="https://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script>
+    <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.10.0/bootstrap-table.min.js"></script>-->
+        <script src="js/bootstrap-table.js"></script>
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.10.0/bootstrap-table.min.css" rel="stylesheet" type="text/css" />
 
         <script src="js/vendor/modernizr-2.8.3.min.js"></script>
         <script src="js/chai.js"></script>
@@ -20,14 +26,63 @@
         <script>
             chai.use(chaiHttp);
         </script>
-       
+        
+        <script type="text/javascript">
+            chai.use(chaiHttp);
+            /*document.body.innerHTML = "<h3>Data: " + ligaRes.body["standing"]["0"]["points"] + "Data2: " + premRes.body["standing"]["0"]["points"] + "</h3>";*/
+            let premRes = "";
+            let ligaRes = "";
+            let serieRes = "";
+            let bundesRes = "";
+            let URL = "https://api.football-data.org/v1";
+            chai.request(URL).get("/competitions/445/leagueTable").set("X-Auth-Token", "8097366a810b4991800e3769c1e1dfbd").then(function(res445){
+                premRes = res445.body;
+                chai.request(URL).get("/competitions/455/leagueTable").set("X-Auth-Token", "8097366a810b4991800e3769c1e1dfbd").then(function(res455){
+                    ligaRes = res455.body;
+                    chai.request(URL).get("/competitions/456/leagueTable").set("X-Auth-Token", "8097366a810b4991800e3769c1e1dfbd").then(function(res456){
+                        serieRes = res456.body;
+                        chai.request(URL).get("/competitions/452/leagueTable").set("X-Auth-Token", "8097366a810b4991800e3769c1e1dfbd").then(function(res452){
+                            bundesRes = res452.body;
+                            
+                            let formattedBundesTable = [];
+
+                            /*for (i = 0; i < 17; i++) { 
+                                formattedBundesTable.push({
+                                    "position": bundesRes["standing"][i]["position"],
+                                    "crestURI": bundesRes["standing"][i]["crestURI"],
+                                    "teamName": bundesRes["standing"][i]["teamName"],
+                                    "playedGames": bundesRes["standing"][i]["playedGames"],
+                                    "wins": bundesRes["standing"][i]["wins"],
+                                    "draws": bundesRes["standing"][i]["draws"],
+                                    "losses": bundesRes["standing"][i]["losses"],
+                                    "goals": bundesRes["standing"][i]["goals"],
+                                    "goalsAgainst": bundesRes["standing"][i]["goalsAgainst"],
+                                    "goalDifference": bundesRes["standing"][i]["goalDifference"],
+                                    "points": bundesRes["standing"][i]["points"]
+                                });
+                            }*/
+                            
+                            $(document).ready(function () {
+                                $('#table').bootstrapTable({
+                                    //Assigning data to table
+                                    data: bundesRes["standing"]
+                                });
+                            });
+                                
+                            /*document.getElementById("dataDiv").innerHTML = "<h3>Data: " + ligaRes.body["standing"]["0"]["points"] + "Data2: " + premRes.body["standing"]["0"]["points"] + "</h3>";*/
+                            
+                            })
+                        })
+                    })
+                });
+        </script>
     </head>
     <body>
         <!--[if lt IE 8]>
             <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
         <![endif]-->
-        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.js"></script>
-        <script>window.jQuery || document.write('<script src="js/vendor/jquery-1.11.2.js"><\/script>')</script>
+        <!--<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.js"></script>
+        <script>window.jQuery || document.write('<script src="js/vendor/jquery-1.11.2.js"><\/script>')</script>-->
 
         <script src="js/plugins.js"></script>
         <script src="js/main.js"></script>
@@ -51,28 +106,24 @@
         <h1>World Soccer Stats</h1>
         <h2>Top Scorers</h2>
         <div id="dataDiv"></div>
-        <script>
-            chai.use(chaiHttp);
-            /*document.body.innerHTML = "<h3>Data: " + ligaRes.body["standing"]["0"]["points"] + "Data2: " + premRes.body["standing"]["0"]["points"] + "</h3>";*/
-            let premRes = "";
-            let ligaRes = "";
-            let serieRes = "";
-            let bundesRes = "";
-            let URL = "https://api.football-data.org/v1";
-            chai.request(URL).get("/competitions/445/leagueTable").set("X-Auth-Token", "8097366a810b4991800e3769c1e1dfbd").then(function(res445){
-                premRes = res445;
-                chai.request(URL).get("/competitions/455/leagueTable").set("X-Auth-Token", "8097366a810b4991800e3769c1e1dfbd").then(function(res455){
-                    ligaRes = res455;
-                    chai.request(URL).get("/competitions/455/leagueTable").set("X-Auth-Token", "8097366a810b4991800e3769c1e1dfbd").then(function(res456){
-                        serieRes = res455;
-                        chai.request(URL).get("/competitions/455/leagueTable").set("X-Auth-Token", "8097366a810b4991800e3769c1e1dfbd").then(function(res452){
-                            bundesRes = res452;
-                                
-                            document.getElementById("dataDiv").innerHTML = "<h3>Data: " + ligaRes.body["standing"]["0"]["points"] + "Data2: " + premRes.body["standing"]["0"]["points"] + "</h3>";
-                            })
-                        })
-                    })
-                });
-        </script>
+        <form id="form1" runat="server">
+        <table id="table">
+            <thead>
+                <tr>
+                    <th data-field="position">Pos</th>
+                <!--<th data-field="crestURI">Col</th>-->
+                    <th data-field="teamName">Club</th>
+                    <th data-field="playedGames">MP</th>
+                    <th data-field="wins">W</th>
+                    <th data-field="draws">D</th>
+                    <th data-field="losses">L</th>
+                    <th data-field="goals">GF</th>
+                    <th data-field="goalsAgainst">GA</th>
+                    <th data-field="goalDifference">GD</th>                   
+                    <th data-field="points">Points</th> 
+                </tr>
+            </thead>
+        </table>
+    </form>
     </body>
 </html>

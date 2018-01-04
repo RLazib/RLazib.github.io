@@ -1,0 +1,69 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <script src="https://code.jquery.com/jquery.min.js"></script>
+    <script src="https://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.10.0/bootstrap-table.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.10.0/bootstrap-table.min.css" rel="stylesheet" type="text/css" />
+    <script src="js/vendor/modernizr-2.8.3.min.js"></script>
+    <script src="js/chai.js"></script>
+    <script src="js/chai-http.js"></script>
+    <script>
+        chai.use(chaiHttp);
+    </script>
+    <script type="text/javascript">
+        chai.use(chaiHttp);
+        $(document).ready(function () {
+            //Sample Json data
+            var jsondata = [
+                {
+                    "id": "1",
+                    "Name": "Name1",
+                    "Address": "Address1"
+                },
+                {
+                    "id": "2",
+                    "Name": "Name2",
+                    "Address": "Address2"
+                },
+                {
+                    "id": "3",
+                    "Name": "Name3",
+                    "Address": "Address3"
+                },
+                {
+                    "id": "4",
+                    "Name": "Name4",
+                    "Address": "Address4"
+                },
+                {
+                    "id": "5",
+                    "Name": "Name5",
+                    "Address": "Address5"
+                }];
+            
+            chai.request(URL).get("/competitions/455/leagueTable").set("X-Auth-Token", "8097366a810b4991800e3769c1e1dfbd").then(function(res452){
+                jsondata = res452["standing"];                               
+            });
+ 
+            $('#table').bootstrapTable({
+                //Assigning data to table
+                data: jsondata
+            });
+        });
+    </script>
+</head>
+<body>
+    <form id="form1" runat="server">
+        <table id="table">
+            <thead>
+                <tr>
+                    <th data-field="position">#</th>
+                    <th data-field="teamName">Club</th>
+                    <th data-field="points">points</th>
+                </tr>
+            </thead>
+        </table>
+    </form>
+</body>
+</html>
