@@ -1,5 +1,4 @@
 # RLazib.github.io
-WorldSoccerStats HTML/CSS project
+WorldSoccerStats HTML/CSS/JS project
 
-Made as a simple personal project to both keep a centralized record of the top four leagues, 
-as well as to display competency with HTML and CSS.
+Made as a personal project to aggregate Football news, have an easy display of the tables of the top four leagues, a listing of all upcoming fixtures; as well as a way to practice and learn some web technologies.
