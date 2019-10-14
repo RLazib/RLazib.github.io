@@ -19,6 +19,7 @@ and open the template in the editor.
         
         <script src="https://code.jquery.com/jquery.min.js"></script>
         <script src="https://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script>
+        <!--    <script src="angular-footballdata-api-factory.min.js"></script>-->
         <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.10.0/bootstrap-table.min.js"></script>-->
         <script src="js/bootstrap-table.js"></script>
         <!--<link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.10.0/bootstrap-table.min.css" rel="stylesheet" type="text/css" />-->
@@ -41,38 +42,39 @@ and open the template in the editor.
             let ligaRes = "";
             let serieRes = "";
             let bundesRes = "";
-            let URL = "https://api.football-data.org/v1";
-            chai.request(URL).get("/competitions/445/leagueTable").set("X-Auth-Token", "8097366a810b4991800e3769c1e1dfbd").then(function(res445){
-                premRes = res445.body;
-                chai.request(URL).get("/competitions/455/leagueTable").set("X-Auth-Token", "8097366a810b4991800e3769c1e1dfbd").then(function(res455){
-                    ligaRes = res455.body;
-                    chai.request(URL).get("/competitions/456/leagueTable").set("X-Auth-Token", "8097366a810b4991800e3769c1e1dfbd").then(function(res456){
-                        serieRes = res456.body;
-                        chai.request(URL).get("/competitions/452/leagueTable").set("X-Auth-Token", "8097366a810b4991800e3769c1e1dfbd").then(function(res452){
-                            bundesRes = res452.body;
+            let URL = "https://api.football-data.org/v2";
+            /*chai.request(URL).get("/competitions/PL/standings").set("X-Auth-Token", "8097366a810b4991800e3769c1e1dfbd").then(function(resPL){
+                premRes = resPL.body;
+                chai.request(URL).get("/competitions/PD/standings").set("X-Auth-Token", "8097366a810b4991800e3769c1e1dfbd").then(function(resPD){
+                    ligaRes = resPD.body;
+                    chai.request(URL).get("/competitions/SA/standings").set("X-Auth-Token", "8097366a810b4991800e3769c1e1dfbd").then(function(resSA){
+                        serieRes = resSA.body;
+                        chai.request(URL).get("/competitions/BL1/standings").set("X-Auth-Token", "8097366a810b4991800e3769c1e1dfbd").then(function(resBL1){
+                            bundesRes = resBL1.body; 
                             
                             $(document).ready(function () {
                                 $('#premtable').bootstrapTable({
                                     //Assigning data to table
-                                    data: premRes["standing"]
+                                    //data: premRes["standings"]["table"]
+                                    data: 
                                 });
                                 $('#ligatable').bootstrapTable({
                                     //Assigning data to table
-                                    data: ligaRes["standing"]
+                                    data: ligaRes["standings"]["table"]
                                 });
                                 $('#serietable').bootstrapTable({
                                     //Assigning data to table
-                                    data: serieRes["standing"]
+                                    data: serieRes["standings"]["table"]
                                 });
                                 $('#bundestable').bootstrapTable({
                                     //Assigning data to table
-                                    data: bundesRes["standing"]
+                                    data: bundesRes["standings"]["table"]
                                 });
                             });
                         })
                     })
                 })
-            });
+            });*/
         </script>
         <ul>
             <li><a href="index.html">Home</a></li>
@@ -82,6 +84,7 @@ and open the template in the editor.
             <li style="float:right"><a href="about.html">About</a></li>
         </ul>
         <h1>League Tables</h1>
+        <p style="color:red" style="font-size:2em">Live league table API depracated, migrating to new one</p>
         <h2>
             <div id="legendcontainer">
                 <div id="cllegend">Champion's League Spot</div> 
@@ -94,13 +97,13 @@ and open the template in the editor.
             <thead>
                 <tr>
                     <th data-field="position">Pos</th>
-                    <th data-field="crestURI">Col</th>
-                    <th data-field="teamName">Club</th>
+                    <th data-field="team[crestUrl]">Col</th>
+                    <th data-field="team[name]">Club</th>
                     <th data-field="playedGames">MP</th>
                     <th data-field="wins">W</th>
-                    <th data-field="draws">D</th>
-                    <th data-field="losses">L</th>
-                    <th data-field="goals">GF</th>
+                    <th data-field="draw">D</th>
+                    <th data-field="lost">L</th>
+                    <th data-field="goalsFor">GF</th>
                     <th data-field="goalsAgainst">GA</th>
                     <th data-field="goalDifference">GD</th>                   
                     <th data-field="points">Points</th> 
@@ -186,6 +189,5 @@ and open the template in the editor.
                 document.documentElement.scrollTop = 0;
             }
         </script>
-        
     </body>
 </html>
